@@ -27,7 +27,7 @@ class xml_parser:
     """
     Reads a Pascal VOC XML file and generates the corresponding label files that contain of a box for the text regions.
     """
-    def __init__(self, classes: list, color_dict: dict, xml_filename: str, thickness: int=3):
+    def __init__(self, classes: list, color_dict: dict, xml_filename: str):
         # Load the XML file
         self.tree = ET.parse(os.path.join(xml_filename))
         self.root = self.tree.getroot()
@@ -43,23 +43,8 @@ class xml_parser:
         # Extract points
         self.bb_list = self.extract_bounding_boxes()
 
-        """
-        self.classes = ['bg', 'cancellation_sum', 'trash_position', 'trash_value', 'cancellation_position',
-                        'cancellation_position_value', 'cancellation_person', 'cancellation_person_value',
-                        'booking_sum', 'salutation', 'name', 'street', 'place', 'country', 'email', 'iban',
-                        'booking_date', 'begin journey', 'cancellation_date', 'cancellation_rate', 'other']
-        self.relevant_classes = ['booking_sum', 'cancellation_sum', 'trash_position', 'trash_value',
-                                 'cancellation_position', 'cancellation_position_value', 'cancellation_person',
-                                 'cancellation_person_value']
-        self.class_numbers = {c: n for n, c in enumerate(self.relevant_classes)}
-        self.class_numbers['cancellation_person'] = self.class_numbers['cancellation_position']
-        self.class_numbers['cancellation_person_value'] = self.class_numbers['cancellation_position_value']
-        self.colors = {0: (128, 128, 0), 1: (255, 0, 0), 2: (160, 160, 160), 3: (80, 80, 80), 4: (0, 255, 0), 5: (0, 0, 255)}
-        """
         self.classes = classes
         self.color_dict = color_dict
-
-
 
     def extract_bounding_boxes(self) -> list:
         obj_list = []
@@ -76,15 +61,12 @@ class xml_parser:
 
         return obj_list
 
-    def draw_mask(self, thickness: int=3) -> np.array:
+    def draw_mask(self) -> np.array:
         img = np.zeros((self.height, self.width, 3), np.uint8)
 
         for obj in self.bb_list:
             name = obj['name']
-            """
-            if name not in self.classes:
-                name = 'other'
-            """
+            
             if name in self.classes:
                 #class_number = self.class_numbers[name]
 
@@ -94,7 +76,7 @@ class xml_parser:
                 x_1 = coords['xmax']
                 y_1 = coords['ymax']
 
-                cv2.rectangle(img, (x_0, y_0), (x_1, y_1), self.color_dict[name], -1)#self.colors[self.class_numbers[name]], -1)
+                cv2.rectangle(img, (x_0, y_0), (x_1, y_1), self.color_dict[name], -1)
 
         return img
 
@@ -115,7 +97,6 @@ if __name__ == '__main__':
     class_file = args['class_file']
 
     classes, colors, class_dict = load_class_dict(class_file)
-
     
     if not os.path.exists(out_folder):
         os.makedirs(out_folder)
@@ -178,7 +159,6 @@ if __name__ == '__main__':
         elif key == 115: #s
             os.rename(png_file, os.path.join(out_folder, os.path.basename(png_file)))
             os.rename(xml_file, os.path.join(out_folder, os.path.basename(xml_file)))
-            #print('## Moved {}'.format(os.path.basename(png_file)))
    
             file_list = []
             for root, directory, files in os.walk(in_folder):
