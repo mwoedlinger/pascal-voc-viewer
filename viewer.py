@@ -42,19 +42,6 @@ class xml_parser:
         # Extract points
         self.bb_list = self.extract_bounding_boxes()
 
-        """
-        self.classes = ['bg', 'cancellation_sum', 'trash_position', 'trash_value', 'cancellation_position',
-                        'cancellation_position_value', 'cancellation_person', 'cancellation_person_value',
-                        'booking_sum', 'salutation', 'name', 'street', 'place', 'country', 'email', 'iban',
-                        'booking_date', 'begin journey', 'cancellation_date', 'cancellation_rate', 'other']
-        self.relevant_classes = ['booking_sum', 'cancellation_sum', 'trash_position', 'trash_value',
-                                 'cancellation_position', 'cancellation_position_value', 'cancellation_person',
-                                 'cancellation_person_value']
-        self.class_numbers = {c: n for n, c in enumerate(self.relevant_classes)}
-        self.class_numbers['cancellation_person'] = self.class_numbers['cancellation_position']
-        self.class_numbers['cancellation_person_value'] = self.class_numbers['cancellation_position_value']
-        self.colors = {0: (128, 128, 0), 1: (255, 0, 0), 2: (160, 160, 160), 3: (80, 80, 80), 4: (0, 255, 0), 5: (0, 0, 255)}
-        """
         self.classes = classes
         self.color_dict = color_dict
 
