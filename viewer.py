@@ -87,9 +87,9 @@ class xml_parser:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Loops through all files in the given folder, plots the bounding boxes and allows the user to move the file to the "out" folder with "m".')
-    parser.add_argument('--folder', help='The input folder.', required=True)
-    parser.add_argument('--out', help='The output folder', required=True)
-    parser.add_argument('--class_file', help='Text file containing the classes and their colors seperated by spaces.', required=True)
+    parser.add_argument('--folder', help='The input folder.', required=False, default='data')
+    parser.add_argument('--out', help='The output folder', required=False, default='data_out')
+    parser.add_argument('--class_file', help='Text file containing the classes and their colors seperated by spaces.', required=False, default='classes.txt')
     parser.add_argument('--display_width', help='The display width (pixels)', required=False, default=1920)
     parser.add_argument('--display_height', help='The display height (pixels)', required=False, default=1080)
     args = vars(parser.parse_args())
